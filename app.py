@@ -42,12 +42,14 @@ if image_file is not None:
     radio=st.sidebar.radio("Select Action",('Pytesseract', 'EasyOCR'))
     img = cv2.imdecode( file_bytes, cv2.IMREAD_COLOR)
     st.markdown("<h1 style='color:yellow;'>Extracted Image</h1>", unsafe_allow_html=True)
+    text = ""
     if (radio =='EasyOCR'):
         pass
         extract(img)
         st.image(img, use_column_width=True,clamp = True)
     else:
         d = pytesseract.image_to_data(img,output_type=Output.DICT)
+        text = pt.image_to_string(img)
         n_boxes = len(d['level'])
         for i in range(n_boxes):
             if(d['text'][i] != ""):
@@ -56,7 +58,6 @@ if image_file is not None:
 
         plt.imshow(img)
         st.image(img, use_column_width=True,clamp = True)
-    text = pt.image_to_string(img, config=f"-l eng --oem 3 --psm 1")
     st.markdown("<h1 style='color:yellow;'>Extracted Text</h1>", unsafe_allow_html=True)
     if text !="" :
         slot = st.empty()
